@@ -143,7 +143,7 @@ Notice that this method has only effect if the `geolocation.watchPosition(succes
 
 ## TODO
 
-- [X] Enhanced docs
+- [ ] Enhanced docs
 - [ ] Tests
 
 [npm-image]:      https://img.shields.io/npm/v/react-native-cross-geolocation.svg
