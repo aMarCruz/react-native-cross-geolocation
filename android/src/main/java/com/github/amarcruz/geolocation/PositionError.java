@@ -31,9 +31,6 @@ final class PositionError {
         if (message != null) {
             error.putString("message", message);
         }
-        if (details != null) {
-            error.putString("details", details);
-        }
         return error;
     }
 }
