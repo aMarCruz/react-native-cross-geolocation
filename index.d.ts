@@ -110,7 +110,7 @@ declare module "react-native-cross-geolocation" {
     /**
      * Sets configuration options that will be used in all location requests.
      */
-    setConfiguration(config: GeolocConfigAndroid | GeolocConfigIOS): void;
+    setRNConfiguration(config: GeolocConfigAndroid | GeolocConfigIOS): void;
     /**
      * Request suitable Location permission based on the key configured on pList. If
      * NSLocationAlwaysUsageDescription is set, it will request Always authorization, although if

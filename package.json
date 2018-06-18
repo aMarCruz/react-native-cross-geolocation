@@ -1,6 +1,6 @@
 {
   "name": "react-native-cross-geolocation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native Geolocation complatible module that uses the new Google Location API in Android devices.",
   "main": "index.js",
   "scripts": {

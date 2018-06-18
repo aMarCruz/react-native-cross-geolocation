@@ -36,17 +36,14 @@ module.exports = {
     * See https://facebook.github.io/react-native/docs/geolocation.html#setrnconfiguration
     *
     */
-  setRNConfiguration (config) {
-    RNGeolocation.setConfiguration(config)
-  },
+  setRNConfiguration: RNGeolocation.setConfiguration,
 
   /*
    * Request suitable Location permission based on the key configured on pList.
    *
    * See https://facebook.github.io/react-native/docs/geolocation.html#requestauthorization
    */
-  requestAuthorization () {
-  },
+  requestAuthorization () {},
 
   /*
    * Invokes the success callback once with the latest location info.
