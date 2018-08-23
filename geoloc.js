@@ -127,7 +127,7 @@ module.exports = {
         return // still valid subscriptions
       }
     }
-    Geolocation.stopObserving()
+    RNGeolocation.stopObserving()
   },
 
   stopObserving () {
