@@ -1,7 +1,7 @@
 {
   "name": "react-native-cross-geolocation",
-  "version": "1.0.2",
-  "description": "React Native Geolocation complatible module that uses the new Google Location API in Android devices.",
+  "version": "1.0.3",
+  "description": "React Native Geolocation complatible module that uses the new Google Location API on Android devices.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,16 +16,11 @@
     "fused",
     "maps"
   ],
-  "author": "aMarCruz",
+  "author": "aMarCruz <amarcruzbox-git@yahoo.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/aMarCruz/react-native-cross-geolocation/issues"
-  },
+  "bugs": "https://github.com/aMarCruz/react-native-cross-geolocation/issues",
   "homepage": "https://github.com/aMarCruz/react-native-cross-geolocation#README",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aMarCruz/react-native-cross-geolocation.git"
-  },
+  "repository": "https://github.com/aMarCruz/react-native-cross-geolocation.git",
   "peerDependencies": {
     "react-native": ">=0.50.0"
   },

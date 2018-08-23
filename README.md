@@ -3,15 +3,26 @@
 [![npm][npm-image]](https://www.npmjs.com/package/react-native-cross-geolocation)
 [![License][license-image]](LICENSE)
 
-React Native Geolocation complatible module that uses the new Google Location API in Android devices.
+React Native Geolocation complatible module that uses the new [Google Play services location API](https://developer.android.com/training/location/) on Android devices.
 
 This module is for React Native 0.50.x using the Google Gradle plugin 3.1.2 or later.
+
+If this library has helped you, please support my work with a star or [buy me a coffee](https://www.buymeacoffee.com/aMarCruz).
 
 ## Setup
 
 ```bash
 $ yarn add react-native-cross-geolocation
 $ react-native link react-native-cross-geolocation
+```
+
+After that, open your android/app/build.gradle and, in the `dependencies` section, change this:
+```groovy
+compile project(':react-native-cross-geolocation')
+```
+to:
+```groovy
+implementation project(':react-native-cross-geolocation')
 ```
 
 JavaScript import:
@@ -32,8 +43,8 @@ In order to enable geolocation in the background, you need to include the 'NSLoc
 To request access to location, you need to add the following line to your app's AndroidManifest.xml:
 
 ```xml
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
 Android API >= 18 Positions will also contain a `mocked` boolean to indicate if position was created from a mock provider.
@@ -67,7 +78,7 @@ config | object | Yes | See below.
 Supported options (optionals):
 
 - `skipPermissionRequests` (boolean, iOS-only) - Defaults to `false`. If `true`, you must request permissions before using Geolocation APIs.
-- `lowAccuracyMode` (number, Android-only) - Defaults to LowAccuracyMode.BALANCED.
+- `lowAccuracyMode` (number, Android-only) - Defaults to [LowAccuracyMode.BALANCED](#constants).
 - `fastestInterval` (number, Android-only) - Defaults to 10000 (10 secs).
 - `updateInterval` (number, Android-only) - Defaults to 5000 (5 secs).
 
@@ -141,10 +152,41 @@ Stops observing for device location changes. In addition, it removes all listene
 
 Notice that this method has only effect if the `geolocation.watchPosition(successCallback, errorCallback)` method was previously invoked.
 
+
+### Constants
+
+rnCrossGeolocation exports a `LowAccuracyMode` object with values to be used in the `lowAccuracyMode` property of the parameter sent to [`setRNConfiguration`](#setrnconfiguration):
+
+NAME | DETAILS
+---- | -------
+LowAccuracyMode.BALANCED<br>(102)<br>This is the default mode. | Request location precision to within a city block, which is an accuracy of approximately 100 meters.<br>This is considered a coarse level of accuracy, and is likely to consume less power. With this setting, the location services are likely to use WiFi and cell tower positioning. Note, however, that the choice of location provider depends on many other factors, such as which sources are available.
+LowAccuracyMode.LOW_POWER<br>(104) | Request city-level precision, which is an accuracy of approximately 10 Km.<br>This is considered a coarse level of accuracy, and is likely to consume less power.
+LowAccuracyMode.NO_POWER<br>(105) | Use this if you need negligible impact on power consumption, but want to receive location updates when available.<br>With this setting, your app does not trigger any location updates, but receives locations triggered by other apps.
+
+_**NOTE:** These constants are only for Android, on iOS they are undefined._
+
+
+## What's New
+
+- Flow typings.
+- The [changelog](CHANGELOG.md) follows the format on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+- PR #1 Fixes `undefined` error by the use of Geolocation instead RNGeolocation. Thanks to @badrange
+
+
 ## TODO
 
 - [ ] Enhanced docs
 - [ ] Tests
 
+
+## Support my Work
+
+I'm a full-stack developer with more than 20 year of experience and I try to share most of my work for free and help others, but this takes a significant amount of time and effort so, if you like my work, please consider...
+
+[![Buy me a Coffee][bmc-image]](https://www.buymeacoffee.com/aMarCruz)
+
+Thanks for your support!
+
 [npm-image]:      https://img.shields.io/npm/v/react-native-cross-geolocation.svg
 [license-image]:  https://img.shields.io/npm/l/express.svg
+[bmc-image]:      https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png

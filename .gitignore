@@ -57,3 +57,5 @@ local.properties
 android/*.iml
 
 ~assets/
+.vscode
+*.tgz

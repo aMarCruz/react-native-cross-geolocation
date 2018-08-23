@@ -2,26 +2,20 @@
 import groovy.json.JsonSlurper
 
 // dynamically retrieve version from package.json
-def computePackageVersion() {
-    def slurper = new JsonSlurper()
-    def json = slurper.parse(file('../package.json'), 'utf-8')
-    return json.version
+def getPackageVersion() {
+    return new JsonSlurper().parse(file('../package.json'), 'utf-8').version
 }
 
-/*
-    Google Play Services 12.0.x to 15.0.x depends on support libraries 26.1.0
-*/
+def safeExtGet(prop, fallback) {
+    rootProject.ext.hasProperty(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+// Google Play Services 12.0.x to 15.0.x depends on support libraries 26.1.0
 def DEF_PLAY_SERVICES_VERSION   = '15.0.1'
 def DEF_BUILD_TOOLS_VERSION     = '27.0.3'
 def DEF_MIN_SDK_VERSION         = 21
 def DEF_COMPILE_SDK_VERSION     = 27
 def DEF_TARGET_SDK_VERSION      = 27
-
-def _playServicesVersion    = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : DEF_PLAY_SERVICES_VERSION
-def _buildToolsVersion      = rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEF_BUILD_TOOLS_VERSION
-def _minSdkVersion          = rootProject.hasProperty('minSdkVersion') ? rootProject.minSdkVersion : DEF_MIN_SDK_VERSION
-def _compileSdkVersion      = rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEF_COMPILE_SDK_VERSION
-def _targetSdkVersion       = rootProject.hasProperty('targetSdkVersion')  ? rootProject.targetSdkVersion  : DEF_TARGET_SDK_VERSION
 
 buildscript {
     repositories {
@@ -37,12 +31,12 @@ buildscript {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion _compileSdkVersion
-    buildToolsVersion _buildToolsVersion
+    compileSdkVersion safeExtGet('compileSdkVersion', DEF_COMPILE_SDK_VERSION)
+    buildToolsVersion safeExtGet('buildToolsVersion', DEF_BUILD_TOOLS_VERSION)
 
     defaultConfig {
-        minSdkVersion _minSdkVersion
-        targetSdkVersion _targetSdkVersion
+        minSdkVersion safeExtGet('minSdkVersion', DEF_MIN_SDK_VERSION)
+        targetSdkVersion safeExtGet('targetSdkVersion', DEF_TARGET_SDK_VERSION)
         versionCode 1
         versionName computePackageVersion()
     }
@@ -59,10 +53,19 @@ repositories {
     mavenLocal()
     google()
     jcenter()
-    maven { url "$rootDir/../node_modules/react-native/android" }
+    maven {
+        url "$rootDir/../node_modules/react-native/android"
+        name 'React Native (local)'
+    }
 }
 
 dependencies {
+    def _playServicesVersion  = safeExtGet('googlePlayServicesVersion', DEF_PLAY_SERVICES_VERSION)
     compileOnly 'com.facebook.react:react-native:+'
     implementation "com.google.android.gms:play-services-location:$_playServicesVersion"
 }
+
+task customClean(type: Delete) {
+    delete rootProject.buildDir
+}
+clean.dependsOn customClean

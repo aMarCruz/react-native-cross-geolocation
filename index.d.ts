@@ -2,27 +2,28 @@ declare module "react-native-cross-geolocation" {
 
   export type GeolocationReturnType = {
     coords: {
-        latitude: number;
-        longitude: number;
-        altitude: number | null;
-        accuracy: number;
-        altitudeAccuracy: number | null;
-        heading: number | null;
-        speed: number | null;
+        latitude: number,
+        longitude: number,
+        altitude: number | null,
+        accuracy: number,
+        altitudeAccuracy: number | null,
+        heading: number | null,
+        speed: number | null,
     };
-    timestamp: number;
+    timestamp: number,
+    mocked?: boolean,
   };
 
   export type GeolocationError = {
-      code: number;
-      message: string;
-      PERMISSION_DENIED: number;
-      POSITION_UNAVAILABLE: number;
-      TIMEOUT: number;
+      code: number,
+      message: string,
+      PERMISSION_DENIED: number,
+      POSITION_UNAVAILABLE: number,
+      TIMEOUT: number,
   };
 
-  type SuccessCb = (loc: GeolocationReturnType) => void
-  type ErrorCb = (err: GeolocationError) => void
+  export type SuccessCb = (loc: GeolocationReturnType) => void
+  export type ErrorCb = (err: GeolocationError) => void
 
   export type LowAccuracyMode = {
     /**
