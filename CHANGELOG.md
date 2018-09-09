@@ -2,6 +2,14 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2018-09-09
+### Changed
+- Minimum Android SDK version from 21 to 16.
+- Update README with a more clear note about the use of Gradle 4.4
+
+### Fixed
+- #2 : Error in build.gradle. Thanks to @mowbell for reporting this.
+
 ## [1.0.3] - 2018-06-23
 ### Added
 - Flow typings.

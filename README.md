@@ -5,9 +5,13 @@
 
 React Native Geolocation complatible module that uses the new [Google Play services location API](https://developer.android.com/training/location/) on Android devices.
 
-This module is for React Native 0.50.x using the Google Gradle plugin 3.1.2 or later.
-
 If this library has helped you, please support my work with a star or [buy me a coffee](https://www.buymeacoffee.com/aMarCruz).
+
+## Important
+
+This module was tested with React Native 0.56.0 using Gradle 4.4* and the Gradle plugin 4.1.2, but it should work smoothly with React Native v0.50 and Gradle plugin 3.1.4.
+
+\* Gradle 4.4 will be predefined in React Native 0.57 and uses `implementation` instead `compile`.
 
 ## Setup
 
@@ -168,6 +172,8 @@ _**NOTE:** These constants are only for Android, on iOS they are undefined._
 
 ## What's New
 
+- Closes #2 : Error in build.gradle. Thanks to @mowbell for reporting this.
+- Changed minimum Android SDK version from 21 to 16.
 - Flow typings.
 - The [changelog](CHANGELOG.md) follows the format on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - PR #1 Fixes `undefined` error by the use of Geolocation instead RNGeolocation. Thanks to @badrange
