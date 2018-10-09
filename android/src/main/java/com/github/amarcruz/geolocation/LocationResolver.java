@@ -52,7 +52,7 @@ class LocationResolver {
         error(PositionError.POSITION_UNAVAILABLE, message);
     }
 
-    public static WritableMap locationToMap(Location location) {
+    static WritableMap locationToMap(Location location) {
         WritableMap map = Arguments.createMap();
         WritableMap coords = Arguments.createMap();
 

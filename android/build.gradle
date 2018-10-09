@@ -11,7 +11,7 @@ def safeExtGet(prop, fallback) {
 }
 
 // Google Play Services 12.0.x to 15.0.x depends on support libraries 26.1.0
-def _playServicesVersion = safeExtGet('minSdkVersion', '15.0.1')
+def _playServicesVersion = safeExtGet('googlePlayServicesVersion', '15.0.1')
 def _buildToolsVersion   = safeExtGet('buildToolsVersion', '27.0.3')
 def _compileSdkVersion   = safeExtGet('compileSdkVersion', 27)
 def _targetSdkVersion    = safeExtGet('targetSdkVersion', 27)
@@ -66,4 +66,5 @@ dependencies {
 task customClean(type: Delete) {
     delete rootProject.buildDir
 }
+
 clean.dependsOn customClean

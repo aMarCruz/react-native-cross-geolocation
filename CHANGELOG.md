@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2018-10-09
+### Fixed
+- Error in build.gradle no getting the correct `googlePlayServicesVersion` variable.
+- Minor fixes to the README.
+
 ## [1.0.4] - 2018-09-09
 ### Changed
 - Minimum Android SDK version from 21 to 16.

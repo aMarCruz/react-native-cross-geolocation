@@ -5,7 +5,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.location.LocationRequest;
 
 final class LocationOptions {
-    private static final float DEFAULT_DISTANCE_FILTER = 100;
+    private static final float DEFAULT_DISTANCE_FILTER = 100f;
 
     private static long fastestInterval = 5000;     // 5 secs
     private static long updateInterval = 10000;     // 10 secs
@@ -17,10 +17,11 @@ final class LocationOptions {
     final int priority;
 
     private LocationOptions(
-            long timeout,
-            double maximumAge,
-            boolean highAccuracy,
-            float distanceFilter) {
+            final long timeout,
+            final double maximumAge,
+            final boolean highAccuracy,
+            final float distanceFilter
+    ) {
         this.timeout = timeout;
         this.maximumAge = maximumAge;
         this.distanceFilter = distanceFilter;
@@ -28,7 +29,7 @@ final class LocationOptions {
     }
 
     @NonNull
-    static LocationOptions fromReactMap(ReadableMap map) {
+    static LocationOptions fromReactMap(final ReadableMap map) {
         long timeout = Long.MAX_VALUE;
         double maximumAge = Double.POSITIVE_INFINITY;
         boolean highAccuracy = false;
