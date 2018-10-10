@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2018-10-10
+### Fixed
+- Error in getExtValue of build.gradle
+
 ## [1.0.5] - 2018-10-09
 ### Fixed
 - Error in build.gradle no getting the correct `googlePlayServicesVersion` variable.
