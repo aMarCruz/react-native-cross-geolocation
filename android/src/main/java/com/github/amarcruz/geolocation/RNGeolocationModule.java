@@ -1,11 +1,9 @@
 package com.github.amarcruz.geolocation;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -27,12 +25,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +58,7 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
     }
 
     @Override
-    public Map<String, Object> getConstants () {
+    public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
 
         constants.put("HIGH_ACCURACY", LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -77,7 +70,7 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setConfiguration (final ReadableMap conf) {
+    public void setConfiguration(final ReadableMap conf) {
         LocationOptions.setConfiguration(conf);
     }
 
@@ -93,7 +86,7 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        if (!isPlayServicesAvailable(context)) {
+        if (isPlayServicesNotAvailable(context)) {
             resolver.error("Google Play Service not available.");
             return;
         }
@@ -116,24 +109,18 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
                 .build();
 
         settingsClient.checkLocationSettings(locationSettingsRequest)
-                .addOnSuccessListener(activity, new OnSuccessListener<LocationSettingsResponse>() {
-                    @Override
-                    public void onSuccess(@NonNull LocationSettingsResponse task) {
-                        // All location settings are satisfied.
-                        getUserLocation(locationRequest, opts, resolver);
-                    }
+                .addOnSuccessListener(activity, task -> {
+                    // All location settings are satisfied.
+                    getUserLocation(locationRequest, opts, resolver);
                 })
-                .addOnFailureListener(activity, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception ex) {
-                        final int code = ((ApiException) ex).getStatusCode();
-                        resolver.error("Error " + code + ": " + ex.getMessage());
-                    }
+                .addOnFailureListener(activity, ex -> {
+                    final int code = ((ApiException) ex).getStatusCode();
+                    resolver.error("Error " + code + ": " + ex.getMessage());
                 });
     }
 
     @ReactMethod
-    public void stopObserving () {
+    public void stopObserving() {
         if (mRequestingLocationUpdates) {
             mRequestingLocationUpdates = false;
             try {
@@ -145,7 +132,7 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startObserving (final ReadableMap opts) {
+    public void startObserving(final ReadableMap opts) {
         if (mRequestingLocationUpdates) {
             return;
         }
@@ -153,16 +140,16 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
         mRequestingLocationUpdates = startUpdater(LocationOptions.fromReactMap(opts));
     }
 
-    @SuppressLint("MissingPermission")
     private void getUserLocation(
             final LocationRequest locationRequest,
             final LocationOptions options,
             final LocationResolver resolver
     ) {
-        if (mFusedProviderClient != null) {
-            mFusedProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
+        final ReactApplicationContext context = getReactApplicationContext();
+
+        if (mFusedProviderClient != null && hasPermissions(context)) {
+            try {
+                mFusedProviderClient.getLastLocation().addOnCompleteListener(task -> {
                     Location location = task.getResult();
 
                     if (location != null &&
@@ -175,8 +162,10 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
                                 locationRequest,
                                 resolver).getLocation();
                     }
-                }
-            });
+                });
+            } catch (SecurityException ex) {
+                emitError(PositionError.PERMISSION_DENIED, ex.getMessage());
+            }
         }
     }
 
@@ -189,7 +178,7 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
             return false;
         }
 
-        if (!isPlayServicesAvailable(context)) {
+        if (isPlayServicesNotAvailable(context)) {
             emitError("Google Play Service not available.");
             return false;
         }
@@ -199,44 +188,37 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
             return false;
         }
 
-        final SettingsClient settingsClient = LocationServices.getSettingsClient(context);
+        try {
+            final SettingsClient settingsClient = LocationServices.getSettingsClient(context);
 
-        final LocationRequest locationRequest = new LocationRequest()
-                .setInterval(LocationOptions.getUpdateInterval())
-                .setFastestInterval(LocationOptions.getFastestInterval())
-                .setPriority(options.priority)
-                .setExpirationDuration(options.timeout)
-                .setSmallestDisplacement(options.distanceFilter);
+            final LocationRequest locationRequest = new LocationRequest()
+                    .setInterval(LocationOptions.getUpdateInterval())
+                    .setFastestInterval(LocationOptions.getFastestInterval())
+                    .setPriority(options.priority)
+                    .setExpirationDuration(options.timeout)
+                    .setSmallestDisplacement(options.distanceFilter);
 
-        final LocationSettingsRequest locationSettingsRequest = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest)
-                .build();
+            final LocationSettingsRequest locationSettingsRequest = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                    .build();
 
-        settingsClient.checkLocationSettings(locationSettingsRequest)
-                .addOnSuccessListener(activity, new OnSuccessListener<LocationSettingsResponse>() {
-                    @SuppressLint("MissingPermission")
-                    @Override
-                    public void onSuccess(@NonNull LocationSettingsResponse task) {
+            settingsClient.checkLocationSettings(locationSettingsRequest)
+                    .addOnSuccessListener(activity, task -> {
                         // All location settings are satisfied.
                         mFusedProviderClient.requestLocationUpdates(locationRequest, mLocationCallback, null)
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        emitError(e.getMessage());
-                                    }
-                                });
+                                .addOnFailureListener(e -> emitError(e.getMessage()));
 
-                    }
-                })
-                .addOnFailureListener(activity, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception ex) {
+                    })
+                    .addOnFailureListener(activity, ex -> {
                         final int code = ((ApiException) ex).getStatusCode();
                         emitError("Error " + code + ": " + ex.getMessage());
-                    }
-                });
+                    });
+            return true;
 
-        return true;
+        } catch (SecurityException ex) {
+            emitError(PositionError.PERMISSION_DENIED, ex.getMessage());
+            return false;
+        }
     }
 
     private void emitSuccess(final Location location) {
@@ -275,18 +257,18 @@ public class RNGeolocationModule extends ReactContextBaseJavaModule {
                 context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
     }
 
-    private boolean isPlayServicesAvailable(final ReactApplicationContext context) {
+    private boolean isPlayServicesNotAvailable(final ReactApplicationContext context) {
         final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         final int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
 
         if (resultCode == ConnectionResult.SUCCESS) {
-            return true;
+            return false;
         }
 
         if (googleApiAvailability.isUserResolvableError(resultCode)) {
             googleApiAvailability.getErrorDialog(
                     getCurrentActivity(), resultCode, Constants.PLAY_SERVICES_REQUEST).show();
         }
-        return false;
+        return true;
     }
 }

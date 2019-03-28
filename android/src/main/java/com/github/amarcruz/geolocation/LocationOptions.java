@@ -1,6 +1,5 @@
 package com.github.amarcruz.geolocation;
 
-import android.support.annotation.NonNull;
 import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.location.LocationRequest;
 
@@ -28,7 +27,6 @@ final class LocationOptions {
         this.priority = highAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : lowPriorityMode;
     }
 
-    @NonNull
     static LocationOptions fromReactMap(final ReadableMap map) {
         long timeout = Long.MAX_VALUE;
         double maximumAge = Double.POSITIVE_INFINITY;

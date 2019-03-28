@@ -5,13 +5,13 @@
 
 React Native Geolocation complatible module that uses the new [Google Play services location API](https://developer.android.com/training/location/) on Android devices.
 
-If this library has helped you, please support my work with a star or [buy me a coffee](https://www.buymeacoffee.com/aMarCruz).
+If this library has helped you, please support my work with a star or [buy me a coffee][kofi-url].
 
 ## IMPORTANT
 
-This module was tested with React Native 0.57.0, but it should work smoothly with previous versions that uses Gradle 4.4 and Gradle plugin 3.1.2 or later.
+This module was tested with React Native 0.59.0, but it should work smoothly with apps that use Gradle 4.6 or later.
 
-\* Gradle 4.4 is predefined in React Native 0.57 and uses `implementation` instead `compile`.
+\* For previous Gradle versions use react-native-cross-geolocation v1.0.6 or bellow.
 
 ## Setup
 
@@ -20,34 +20,23 @@ yarn add react-native-cross-geolocation
 react-native link react-native-cross-geolocation
 ```
 
-After that, open your android/app/build.gradle and, in the `dependencies` section, change this:
+### Play Services Location Version
 
-```groovy
-compile project(':react-native-cross-geolocation')
-```
-
-to:
-
-```groovy
-implementation project(':react-native-cross-geolocation')
-```
-
-JavaScript import:
-```js
-import Geolocation from 'react-native-cross-geolocation'
-```
+From v1.1.0, react-native-cross-geolocation supports the global variable `playServicesLocation` to specify the version of 'com.google.android.gms:play-services-location' to use. It defaults to 16.0.0
 
 ### Configuration and Permissions
 
 This section only applies to projects made with `react-native init` or to those made with Create React Native App which have since ejected. For more information about ejecting, please see the [guide](https://github.com/react-community/create-react-native-app/blob/master/EJECTING.md) on the Create React Native App repository.
 
 #### iOS
+
 You need to include the NSLocationWhenInUseUsageDescription key in Info.plist to enable geolocation when using the app. Geolocation is enabled by default when you create a project with react-native init.
 
 In order to enable geolocation in the background, you need to include the 'NSLocationAlwaysUsageDescription' key in Info.plist and add location as a background mode in the 'Capabilities' tab in Xcode.
 
 #### Android
-To request access to location, you need to add the following line to your app's AndroidManifest.xml:
+
+To request access to location, add the following line to your app's AndroidManifest.xml:
 
 ```xml
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -58,6 +47,7 @@ Android API >= 18 Positions will also contain a `mocked` boolean to indicate if 
 Android API >= 23 Permissions are handled automatically.
 
 #### Methods
+
 - [`setRNConfiguration`](#setrnconfiguration)
 - [`requestAuthorization`](#requestauthorization)
 - [`getCurrentPosition`](#getcurrentposition)
@@ -70,6 +60,7 @@ Android API >= 23 Permissions are handled automatically.
 ### Methods
 
 #### `setRNConfiguration()`
+
 ```js
 Geolocation.setRNConfiguration(config);
 ```
@@ -90,12 +81,15 @@ Supported options:
 - `updateInterval` (number, Android-only) - Defaults to 5000 (5 secs).
 
 #### `requestAuthorization()`
+
 ```js
 Geolocation.requestAuthorization();
 ```
+
 Request suitable Location permission based on the key configured on pList. If NSLocationAlwaysUsageDescription is set, it will request Always authorization, although if NSLocationWhenInUseUsageDescription is set, it will request InUse authorization.
 
 #### `getCurrentPosition()`
+
 ```js
 Geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]);
 ```
@@ -117,6 +111,7 @@ Supported options:
 - `enableHighAccuracy` (bool) - On Android, if the location is cached this can return almost immediately, or it will request an update which might take a while.
 
 #### `watchPosition()`
+
 ```js
 Geolocation.watchPosition(success, [error], [options]);
 ```
@@ -140,6 +135,7 @@ Supported options:
 - `useSignificantChanges` (bool) (unused in Android).
 
 #### `clearWatch()`
+
 ```js
 Geolocation.clearWatch(watchID);
 ```
@@ -151,6 +147,7 @@ NAME | TYPE | REQUIRED | DESCRIPTION
 watchID | number | Yes | Id as returned by `watchPosition()`.
 
 #### `stopObserving()`
+
 ```js
 Geolocation.stopObserving();
 ```
@@ -158,7 +155,6 @@ Geolocation.stopObserving();
 Stops observing for device location changes. In addition, it removes all listeners previously registered.
 
 Notice that this method has only effect if the `geolocation.watchPosition(successCallback, errorCallback)` method was previously invoked.
-
 
 ### Constants
 
@@ -172,20 +168,20 @@ LowAccuracyMode.NO_POWER<br>(105) | Use this if you need negligible impact on po
 
 _**NOTE:** These constants are only for Android, on iOS they are undefined._
 
-
 ## TODO
 
 - [ ] Tests
-
 
 ## Support my Work
 
 I'm a full-stack developer with more than 20 year of experience and I try to share most of my work for free and help others, but this takes a significant amount of time and effort so, if you like my work, please consider...
 
-[![Buy me a Coffee][bmc-image]](https://www.buymeacoffee.com/aMarCruz)
+[<img src="https://amarcruz.github.io/images/kofi_blue.png" height="36" title="Support Me on Ko-fi" />][kofi-url]
+
+Of course, feedback, PRs, and stars are also welcome 🙃
 
 Thanks for your support!
 
 [npm-image]:      https://img.shields.io/npm/v/react-native-cross-geolocation.svg
 [license-image]:  https://img.shields.io/npm/l/express.svg
-[bmc-image]:      https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
+[kofi-url]:       https://ko-fi.com/C0C7LF7I
