@@ -22,7 +22,7 @@ react-native link react-native-cross-geolocation
 
 ### Play Services Location Version
 
-From v1.1.0, react-native-cross-geolocation supports the global variable `playServicesLocation` to specify the version of 'com.google.android.gms:play-services-location' to use. It defaults to 16.0.0
+From v1.1.0, react-native-cross-geolocation supports the global variable `playServicesLocationVersion` to specify the version of 'com.google.android.gms:play-services-location' to use. It defaults to 16.0.0
 
 ### Configuration and Permissions
 
